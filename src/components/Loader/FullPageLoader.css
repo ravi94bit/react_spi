@@ -1,0 +1,40 @@
+.fullpage-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #ffffff 0%, #f3f4f6 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .colorful-spinner {
+    width: 140px;
+    height: 140px;
+    border: 28px solid transparent;
+    border-top: 28px solid #ff6ec4;
+    border-right: 28px solid #66d9e8;
+    border-radius: 80%;
+    animation: spin 1s linear infinite;
+    position: relative;
+  }
+  
+  .colorful-spinner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 8px solid transparent;
+    border-bottom: 8px solid #fbc531;
+    border-left: 8px solid #7873f5;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

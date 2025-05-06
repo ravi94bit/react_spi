@@ -1,35 +1,25 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import './App.css'
-import Home from './components/Home/Home';
-import Login from './components/Authentication/Login';
-import Register from './components/Authentication/Register';
+import React, {useEffect} from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import './App.css';
+import AppRoutes from './routes';
+import { Component } from './config/constants';
+
 
 
 function App() {
+  const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated);
+  console.log('Redux State: isAuthenticated =', isAuthenticated);
 
-  const ProtectedRoute = ({ element }) => {
-    const isAuthenticated = localStorage.getItem("authToken"); // Check if user is logged in
-    return isAuthenticated ? element : <Navigate to="/login" replace />;
-  };
-  
-  const ProtectedAuthRoute = ({ element }) => {
-    const isAuthenticated = localStorage.getItem("authToken"); // Check if user is logged in
-    return !isAuthenticated ? element : <Navigate to="/" replace />;
-  };
-
+  useEffect(() => {
+    document.title = Component; // This will be "HOBO Admin"
+  }, []);
 
   return (
     <Router>
-      <Routes>
-     
-        <Route path="/" element={<ProtectedRoute element={<Home />} />} />
-        <Route path="/login" element={<ProtectedAuthRoute element={<Login />} />} />
-        <Route path="/register" element={<ProtectedAuthRoute element={<Register />} />} />
-      </Routes>
+      <AppRoutes isAuthenticated={isAuthenticated} />
     </Router>
-
-  )
+  );
 }
 
-export default App
+export default App;

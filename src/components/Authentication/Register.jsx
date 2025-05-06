@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import axios from "axios";
-import BASE_URL from "../../config/api";
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema } from "../Validation/Validation";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { registerUser } from "../../services/authService"; // Adjust the import path as needed
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from "../../redux/slices/authSlice";
 
 const Register = () => {
     const [serverErrors, setServerErrors] = useState({});
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [confirmShowPassword, setConfirmShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const {
         register,
@@ -22,11 +27,16 @@ const Register = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const response = await axios.post(`${BASE_URL}/register`, data);
+            const response = await registerUser(data);
+            
 
             if (response.status === 200) {
                 localStorage.setItem('authToken', response.data.token);
                 localStorage.setItem('name', response.data.user.name);
+                dispatch(loginSuccess({
+                    token: response.data.token,
+                    user: response.data.user
+                }));
                 toast.success("Registered successfully!");
                 setTimeout(() => navigate("/"), 1500);
             } else {
@@ -85,26 +95,52 @@ const Register = () => {
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label fw-semibold" style={{ fontSize: "1rem", color: "#555" }}>Password</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             autoComplete="new-password"
                             className="form-control rounded-pill px-4 py-2 border-0 shadow-sm focus:ring-2 focus:ring-primary transition duration-300"
                             id="password"
                             placeholder="Enter a password"
                             {...register("password")}
                         />
+                        <span
+                            onClick={() => setShowPassword(prev => !prev)}
+                            style={{
+                                position: "absolute",
+                                top: "55%",
+                                right: "65px",
+                                transform: "translateY(-50%)",
+                                cursor: "pointer",
+                                color: "#6c757d"
+                            }}
+                        >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
                         {errors.password && <div className="text-danger">{errors.password.message}</div>}
                     </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="confirm_password" className="form-label fw-semibold" style={{ fontSize: "1rem", color: "#555" }}>Confirm Password</label>
+                    <div className="mb-4 position-relative">
+                        <label htmlFor="password_confirmation" className="form-label fw-semibold" style={{ fontSize: "1rem", color: "#555" }}>Confirm Password</label>
                         <input
-                            type="password"
+                            type={confirmShowPassword ? "text" : "password"}
                             autoComplete="new-password"
-                            className="form-control rounded-pill px-4 py-2 border-0 shadow-sm focus:ring-2 focus:ring-primary transition duration-300"
-                            id="confirm_password"
+                            className="form-control rounded-pill px-4 py-2 border-0 shadow-sm"
+                            id="password_confirmation"
                             placeholder="Re-enter your password"
                             {...register("password_confirmation")}
                         />
+                        <span
+                            onClick={() => setConfirmShowPassword(prev => !prev)}
+                            style={{
+                                position: "absolute",
+                                top: "70%",
+                                right: "20px",
+                                transform: "translateY(-50%)",
+                                cursor: "pointer",
+                                color: "#6c757d"
+                            }}
+                        >
+                            {confirmShowPassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
                         {errors.password_confirmation && <div className="text-danger">{errors.password_confirmation.message}</div>}
                     </div>
 

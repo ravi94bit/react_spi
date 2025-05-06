@@ -1,0 +1,36 @@
+.custom-navbar {
+    background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 1050;
+}
+
+.nav-link {
+    transition: all 0.3s ease;
+}
+
+.nav-default {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.nav-default:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.nav-active {
+    background-color: #ffffff;
+    color: #0f2027 !important;
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.2);
+}
+
+.logout-btn:hover {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
+
+.login-btn:hover {
+    background-color: #e0e0e0;
+    color: #0f2027;
+}
